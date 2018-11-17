@@ -63,7 +63,7 @@ def f(L,t):
 	J_m05[1:max_n] = k2vp_05[1:max_n]*c_m05[1:max_n]*Dvcv - k2ip_05[1:max_n]*c_p05[1:max_n]*Dici - k2vp_05[1:max_n]*c_p05[1:max_n]*cveq[1:max_n]*Dv # J(<x>i-1/2) = P(xi)f(<x>i-1/2) - Q(x(i))f(<x>i+1/2))	
 
 	dL0[1:max_n-1] = 1.0/dsizes[1:max_n-1]*(G*prbias[1:max_n-1] + J[0:max_n-2] - J[1:max_n-1])
-	dL1[1:max_n-1] = -(dsizes[1:max_n-1]-1)/(2.0*sigma[1:max_n-1])*(J[0:max_n-2] -2*J_m05[1:max_n-1] + J[1:max_n-1])
+	dL1[1:max_n-1] = -(dsizes[1:max_n-1]-1)/(2.0*sigma[1:max_n-1]*dsizes[1:max_n-1])*(J[0:max_n-2] -2*J_m05[1:max_n-1] + J[1:max_n-1])
 
 	# b. Last one
 	dL0[max_n-1] = 1.0/dsizes[max_n-1]*J[max_n-2]
