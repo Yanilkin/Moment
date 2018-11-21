@@ -41,11 +41,10 @@ sigma[1:] = dsizes[1:]*dsizes[1:]/12.0
 #sigma[-1] = (25+36)/2.0-(5.5)**2
 print sizes
 #print sigma
-print dsizes
+#print dsizes
 #print dsizes/sizes
 #print sizes_av
 
-#k2iv = 1.0
 k2vp = [k2iv]
 for i in range(1,max_n):
 	#k2vp.append(4*pi/Va*(defpr.set_vac_rad(sizes[i])+defpr.set_vac_rad(1))) # Last one is the correction of rate constant
@@ -82,9 +81,10 @@ T = p.T
 Di = 1e-8*np.exp(-0.4*11600/T)
 #Dv = 1.5e-6*np.exp(-1.3*11600/T)
 Dv = 3.7e-6*np.exp(-1.54*11600/T) #From Ivan Novoselov
+
 #Di = 1.0
 #Dv = 1.0
-#Dv = 1.0/k2iv
+
 
 # Equlibrium concentration for dissociation rate
 #from Novoselov
