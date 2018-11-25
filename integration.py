@@ -45,47 +45,30 @@ def f(L,t):
 	c_m05 = 1.0/dsizes*L0 - L1*0.5/(2*sigma) # Concentation c(<xi> - 1/2)
 	c_p05 = 1.0/dsizes*L0 + L1*0.5/(2*sigma) # Concentation c(<xi> + 1/2)
 	
-	#k2v = np.sum(k2vp[:-1]*c[:-1])+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_m05[1:])  # Total sink strength of voids for vacancies: first term from L0, second one from L1
-	#k2i = np.sum(k2ip*c)+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_p05[1:])  # Total sink strength of voids for vacancies
+	k2v = np.sum(k2vp[:-1]*c[:-1])*scale+k2vp[0]*c[0]*scale+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_m05[1:])*scale  # Total sink strength of voids for vacancies: first term from L0, second one from L1
+	k2i = np.sum(k2ip*c)*scale+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_p05[1:])*scale  # Total sink strength of voids for vacancies
 
 	# I. Calculation of SIA concentration from stationary
-	#Dici = Dicif(k2i)
+	Dici = Dicif(k2i)
 	#Dici = 0
 	Dvcv = Dv*c[0]*scale
-	#Dvcv = 1e-0
-	Dici = 0.9*Dvcv
+	#Dici = 0.9*Dvcv
 
 	# II. Changes in vacancy concentration
-	#dL0[0] = G*prbias[0]*0 - ((k2vs+k2vd+k2v+k2vp[0]*c[0])*Dv + k2ip[0]*Dici)*c[0] + k2ip[1]*Dici*c[1] + 2*k2vp[0]*Dv*cveq[1]*c[1] + Dv*(np.sum(k2vp[1:-1]*c_m1[2:]*cveq[2:])+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_p05[1:]*cveq[1:]))
-	dL0[0] = 0
+	dL0[0] = G*prbias[0]/scale - ((k2vs+k2vd+k2v)*Dv + k2ip[0]*Dici)*c[0] + k2ip[1]*Dici*c[1] + 2*k2vp[0]*Dv*cveq[1]*c[1] + Dv*(np.sum(k2vp[1:-1]*c_m1[2:]*cveq[2:])+np.sum((dsizes[1:]-1.0)*k2vp_05[1:]*c_p05[1:]*cveq[1:]))
 	# III. Changes in clusters concentration
 	# a. clusters
 	J[0:max_n-1] = k2vp[0:max_n-1]*c[0:max_n-1]*Dvcv - k2ip[1:max_n]*c_m1[1:max_n]*Dici - k2vp[0:max_n-1]*c_m1[1:max_n]*cveq[1:max_n]*Dv # J(xi) = P(xi)f(xi) - Q(x(i+1))f(x(i+1))
 	J_m05[1:max_n] = k2vp_05[1:max_n]*c_m05[1:max_n]*Dvcv - k2ip_05[1:max_n]*c_p05[1:max_n]*Dici - k2vp_05[1:max_n]*c_p05[1:max_n]*cveq[1:max_n]*Dv # J(<x>i-1/2) = P(xi)f(<x>i-1/2) - Q(x(i))f(<x>i+1/2))	
-	#J[0:max_n-1] = c[0:max_n-1]*Dvcv
-	#J_m05[1:max_n] = c_m05[1:max_n]*Dvcv
-
-	#dL0[1:max_n-1] = 1.0/dsizes[1:max_n-1]*(G*prbias[1:max_n-1] + J[0:max_n-2] - J[1:max_n-1])
-	#dL1[1:max_n-1] = -(dsizes[1:max_n-1]-1)/(2.0*sigma[1:max_n-1]*dsizes[1:max_n-1])*(J[0:max_n-2] -2*J_m05[1:max_n-1] + J[1:max_n-1])
 	
-	dL0[1:max_n-1] = (G*prbias[1:max_n-1] + J[0:max_n-2] - J[1:max_n-1])
+	dL0[1:max_n-1] = (G*prbias[1:max_n-1]/scale + J[0:max_n-2] - J[1:max_n-1])
 	dL1[1:max_n-1] = -(dsizes[1:max_n-1]-1)/dsizes[1:max_n-1]*(J[0:max_n-2] -2*J_m05[1:max_n-1] + J[1:max_n-1])
 	
-	#dL0[1:max_n-1] = J[0:max_n-2] - J[1:max_n-1]
-	#dL1[1:max_n-1] = -(dsizes[1:max_n-1]-1.0)/(2.0*sigma[1:max_n-1]*dsizes[1:max_n-1])*(J[0:max_n-2] -2*J_m05[1:max_n-1] + J[1:max_n-1])
-
 	# b. Last one
-	#dL0[max_n-1] = 1.0/dsizes[max_n-1]*J[max_n-2]
-	#dL1[max_n-1] = -(dsizes[max_n-1]-1)/(2.0*sigma[max_n-1]*dsizes[max_n-1])*(J[max_n-2] -2*J_m05[max_n-1])
 	dL0[max_n-1] = J[max_n-2]
 	dL1[max_n-1] = -(dsizes[max_n-1]-1)/dsizes[max_n-1]*(J[max_n-2] -2*J_m05[max_n-1])
 
 	dL = np.hstack((dL0,dL1))
-	#print dL0[0]
-	#print dL1[max_n-1]*dsizes[max_n-1]*sigma[max_n-1]
-
-	#print dL1
-	#print np.sum((dL0*sizes_av+dL1*sigma)*dsizes)
 	return dL
 
 if __name__ == "__main__":
@@ -102,7 +85,7 @@ if __name__ == "__main__":
 	#print "final distribution L1\n", L1[-1]
 	
 	#print "final derivitives\n", f(results[-1],0)
-	print "total number of clusters\n", np.sum(L0[-1,1:]*dsizes[1:])
+	print "total number of clusters\n", np.sum(L0[-1]*dsizes)
 
 	print "total vacancy concentration\n", np.sum((L0[-1]*sizes_av+L1[-1]*sigma)*dsizes)
 	print "total vacancy concentration\n", np.sum((L0[-1]*sizes_av)*dsizes)

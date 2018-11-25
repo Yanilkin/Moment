@@ -1,16 +1,16 @@
 #Parameters
-G = 1e-8
-max_dose = 1e+2
-T = 600
+G = 1e-4
+max_dose = 1e2
+T = 900
 
 # size discretization
 max_n = 200
-dn1 = 31
-base = 1.05
+dn1 = 11
+base = 1.10
 dx = 5
 
 # integration and output
-integ_steps = 100
+integ_steps = 10000
 nframes = 100
 
 
@@ -18,8 +18,8 @@ nframes = 100
 import materials_constants as mc
 import numpy as np
 L_in = np.zeros(2*max_n)
-#L_in[0] = np.sqrt(G/mc.k2iv/mc.Di)
-L_in[0] = 1.5e-8
+L_in[0] = np.sqrt(G/mc.k2iv/mc.Di)
+#L_in[0] = 1.5e-8
 #L_in[0] = 1e-6
 scale = 1.5e-8
 #L_in[450:470] = scale*np.exp(-np.power((mc.sizes[450:470]-mc.sizes[460]+1.0)/(mc.sizes[460]-mc.sizes[455]),2))

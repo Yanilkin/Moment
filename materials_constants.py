@@ -9,8 +9,8 @@ pi = 3.14 # Pui number
 
 #k2s = 1.2e13*0 # Surface sink
 k2s = 5e13*0 # Surface sink
-k2d = 5e18*0 # Dislocation network sink
-zid = 3.0 # Bias factor
+k2d = 5e13 # Dislocation network sink
+zid = 1.1 # Bias factor
 zvd = 1.0 # Bias factor
 k2is = k2s
 k2vs = k2s
@@ -94,7 +94,7 @@ b = 2.9587 # From MD Ivan Novoselov
 cveq = np.exp(-(Ef+a*np.power(sizes-1,0.6667)-a*np.power(sizes,0.6667))*11600/T)
 cveq[0] = np.exp(-Ef*11600/T)
 cveq[1] = np.exp(-0.2*11600/T) #Binding energy for divacancy
-cveq = 1e-10*cveq
+#cveq = 1e-10*cveq
 
 #Production bias
 prbias = np.zeros(max_n)
